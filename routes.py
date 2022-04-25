@@ -1,6 +1,7 @@
+from flask import render_template
 from app import app
-
+from forms import LoginForm
 
 @app.route('/')
 def main_page():
-    return '<h1>Hello!</h1>'
+    return render_template('index.html')
