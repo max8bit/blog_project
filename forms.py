@@ -11,20 +11,22 @@ class LoginForm(FlaskForm):  # пишу свою форму поверх баз�
     submit = SubmitField('Войти')
 
 
-class RegistrationForm(FlaskForm):
-    username = SubmitField('Имя пользователя', validators=[DataRequired()])
-    email = SubmitField('Email', validators=[DataRequired()])
-    password = SubmitField('Password', validators=[DataRequired()])
-    password_again = SubmitField('Password(подтвержденние): ',
-    validators=[DataRequired(), EqualTo('password')])
-    submit= SubmitField('Регистрация')
+class RegistrationForm(FlaskForm):  # форма регистрации на оснвое базовой формы из Flask
+    username = StringField('Имя пользователя: ', validators=[DataRequired()])
+    email = StringField('Email: ', validators=[DataRequired()])
+    password = PasswordField('Пароль: ', validators=[DataRequired()])
+    password_again = PasswordField('Пароль (подтверждение): ',
+                                   validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Регистрация')
 
     def check_username(self, username):
-        user = User.query.filter(username = username.data)
-        if user is not None:
+        # найду пользователя в Базе Данных
+        user = User.query.filter_by(username=username.data)
+        if user is not None:  # если пользователь есть в БД
             raise ValidationError('Пользователь с таким ником уже зарегистрирован!')
 
     def check_email(self, email):
-        user = User.query.filter(email = email.data)
-        if user is not None:
+        # найду пользователя в Базе Данных
+        user = User.query.filter_by(email=email.data)
+        if user is not None:  # если пользователь есть в БД
             raise ValidationError('Пользователь с такой почтой уже зарегистрирован!')
